@@ -2,8 +2,19 @@ extends layouts/layout
 
 block content
     h1 Albums
-    ul
-        each album in albums
-            li
-                a(href="/artists/#{artist}/albums/#{album.linkName}")= album.name
-                a.btn.btn-mini.btn-primary(href="/artists/#{artist}/albums/#{album.linkName}/download") Download
+
+    div#albums-accordion.accordion
+        each album, index in albums
+            - var albumId = 'album-' + index;
+            div.accordion-group
+                div.accordion-heading
+                    a.accordion-toggle(data-toggle="collapse", data-parent="#albums-accordion", href="##{albumId}")
+                        = album.name
+                div(id="#{albumId}").accordion-body.collapse
+                    div.accordion-inner
+                        ul
+                            each song in album.songs
+                                li
+                                    = song
+                                    //a(href="/artists/#{artist}/albums/#{album.linkName}")= album.name
+                                    //a.btn.btn-mini.btn-primary(href="/artists/#{artist}/albums/#{album.linkName}/download") Download
