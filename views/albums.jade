@@ -1,0 +1,9 @@
+extends layouts/layout
+
+block content
+    h1 Albums
+    ul
+        each album in albums
+            li
+                a(href="/artists/#{artist}/albums/#{album.linkName}")= album.name
+                a.btn.btn-mini.btn-primary(href="/artists/#{artist}/albums/#{album.linkName}/download") Download

@@ -1,0 +1,8 @@
+extends layouts/layout
+
+block content
+    h1 Artists
+    ul
+        each artist in artists
+            li: a(href="/artists/#{artist.linkName}")= artist.displayName
+

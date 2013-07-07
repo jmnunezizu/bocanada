@@ -1,0 +1,32 @@
+{
+  "name": "bocanada",
+  "version": "0.0.1",
+  "description": "bocanada",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": "",
+  "author": "Jose Maria Nunez-Izu",
+  "dependencies": {
+    "express": "3.3.3",
+    "jade": "0.32.0",
+    "underscore": "1.5.0",
+    "stylus": "0.33.1",
+    "request": "2.22.0",
+    "nconf": "0.6.5",
+    "node-uuid": "~1.4.0",
+    "async": "0.2.9",
+    "wrench": "1.5.1"
+  },
+  "devDependencies": {
+    "grunt": "0.4.1",
+    "mocha": "1.12.0",
+    "mockery": "1.4.0",
+    "sinon": "1.7.3"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}

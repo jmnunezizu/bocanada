@@ -1,0 +1,12 @@
+extends layouts/layout
+
+block content
+    h1 Songs
+    ul
+        each song in songs
+            li
+                a(href="/artist/#{artist}/albums/#{album}/songs/#{song}")= song
+                a.btn.btn-mini.btn-primary(href="/artists/#{artist}/albums/#{album}/songs/#{song}/download") Download
+
+    button.btn.btn-primary Download All
+
