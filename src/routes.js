@@ -77,6 +77,7 @@ module.exports = function(app) {
         var albumId = prettyDecoreUriComponent(req.param('albumId'));
 
         var downloadLink = library.getAlbumDownloadLink(artistId, albumId);
+        console.log(downloadLink);
         res.download(downloadLink);
     });
 
