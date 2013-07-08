@@ -23,7 +23,7 @@ module.exports = function(app) {
     app.get('/artists', artistsMiddleware, artistController.artists);
     app.get('/artists/:id', artistController.artist);
 
-    // album
+    // albums
     app.get('/artists/:artistId/albums/:albumId', albumController.album);
 
     app.get('/artists/:artistId/albums/:albumId/download', function(req, res) {
