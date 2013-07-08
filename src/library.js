@@ -4,6 +4,8 @@ var path = require('path');
 var _ = require('underscore');
 var Xld = require('xld');
 var xld = new Xld();
+var TarGz = require('./targz');
+var targz = new TarGz();
 
 var LIBRARY_HOME = '/Users/jmnunezizu/Music/iTunes/iTunes Media/Music';
 var IGNORED_FILES_REGEX = /\.DS_Store/
@@ -67,7 +69,12 @@ Library.prototype.getAlbums = function(artistName, cb) {
 };
 
 Library.prototype.getAlbumDownloadLink = function(artistName, albumName) {
-    return path.join(this.home, artistName, albumName);
+    var source = path.join(this.home, artistName, albumName);
+    var target = path.join(source, 'download.tar.gz');
+    targz.compress(source, target, function() {
+        console.log('done');
+    });
+    return target;
 };
 
 Library.prototype.getSongDownloadLink = function(artistName, albumName, songName) {

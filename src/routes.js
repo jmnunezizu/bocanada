@@ -32,7 +32,8 @@ module.exports = function(app) {
 
         var downloadLink = library.getAlbumDownloadLink(artistId, albumId);
         console.log(downloadLink);
-        res.download(downloadLink);
+        //res.download(downloadLink);
+        res.send(downloadLink);
     });
 
     app.get('/artists/:artistId/albums/:albumId/songs/:songId/download', function(req, res) {
