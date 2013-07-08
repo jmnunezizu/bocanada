@@ -4,6 +4,7 @@ var app = express();
 // app config
 app.set('view engine', 'jade');
 app.use('/assets', express.static(__dirname + '/assets'));
+app.use(require('./src/middleware/uri-component-decoder')());
 app.use(express.bodyParser());
 
 require('./src/routes')(app);
