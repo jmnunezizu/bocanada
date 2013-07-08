@@ -17,7 +17,8 @@
     "nconf": "0.6.5",
     "node-uuid": "~1.4.0",
     "async": "0.2.9",
-    "wrench": "1.5.1"
+    "wrench": "1.5.1",
+    "xld": "0.0.1"
   },
   "devDependencies": {
     "grunt": "0.4.1",

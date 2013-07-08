@@ -1,5 +1,6 @@
 var library = require('./library');
 var _ = require('underscore');
+var artistsMiddleware = require('./middleware/artists')();
 
 var prettyEncodeUriComponent = function(str) {
     return encodeURIComponent(str).replace(/%20/g, '+');
@@ -20,19 +21,15 @@ module.exports = function(app) {
 
     app.get('/', view('index'));
 
-    app.get('/artists', function(req, res) {
-        library.getArtists(function(err, artists) {
-            if (err) return res.send(err);
-
-            var encodedArtists = _.map(artists, function(value, artist) {
-                return {
-                    displayName: artist,
-                    linkName: prettyEncodeUriComponent(artist)
-                };
-            });
-
-            res.render('artists', {artists: encodedArtists});
+    app.get('/artists', artistsMiddleware, function(req, res) {
+        var encodedArtists = _.map(req.artists, function(value, artist) {
+            return {
+                displayName: artist,
+                linkName: prettyEncodeUriComponent(artist)
+            };
         });
+
+        res.render('artists', {artists: encodedArtists});
     });
 
     app.get('/artists/:id', function(req, res) {

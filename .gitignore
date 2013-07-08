@@ -1,0 +1,10 @@
+.DS_Store
+.idea/*
+build/*
+npm-debug.log
+results/*
+user.config.json
+test/assets/specRunner.html
+heapdump*.heapsnapshot
+heapdump*.log
+.browserify

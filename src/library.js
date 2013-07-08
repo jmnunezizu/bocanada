@@ -2,6 +2,8 @@ var wrench = require('wrench');
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var Xld = require('xld');
+var xld = new Xld();
 
 var LIBRARY_HOME = '/Users/jmnunezizu/Music/iTunes/iTunes Media/Music';
 var IGNORED_FILES_REGEX = /\.DS_Store/
