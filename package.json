@@ -20,7 +20,8 @@
     "wrench": "1.5.1",
     "xld": "0.0.1",
     "tar": "0.1.17",
-    "fstream": "0.1.22"
+    "fstream": "0.1.22",
+    "socket.io": "0.9.16"
   },
   "devDependencies": {
     "grunt": "0.4.1",

@@ -1,5 +1,5 @@
-var express = require('express');
-var app = express();
+var express = require('express')
+  , app = express();
 
 // app config
 app.set('view engine', 'jade');
@@ -17,6 +17,9 @@ var port = 3000;
 var server = app.listen(port, function() {
     console.log ('server listening on port %s', port);
 });
+
+// socket start
+var socket = require('socket.io').listen(server);
 
 server.on('error', function(err) {
     if (err.code == 'EADDRINUSE') {

@@ -8,3 +8,4 @@ test/assets/specRunner.html
 heapdump*.heapsnapshot
 heapdump*.log
 .browserify
+tmp/*

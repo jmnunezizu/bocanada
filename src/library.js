@@ -1,18 +1,18 @@
-var wrench = require('wrench');
-var fs = require('fs');
-var path = require('path');
-var _ = require('underscore');
-var Xld = require('xld');
-var xld = new Xld();
-var TarGz = require('./targz');
-var targz = new TarGz();
+var wrench = require('wrench')
+  , fs = require('fs')
+  , path = require('path')
+  , _ = require('underscore')
+  , uuid = require('node-uuid')
+  , xld = new require('xld')()
+  , targz = new require('./targz')();
 
-var LIBRARY_HOME = '/Users/jmnunezizu/Music/iTunes/iTunes Media/Music';
-var IGNORED_FILES_REGEX = /\.DS_Store/
+var LIBRARY_HOME = '/Users/jmnunezizu/Music/iTunes/iTunes Media/Music'
+  , IGNORED_FILES_REGEX = /\.DS_Store/
+  , DOWNLOAD_HOME = path.join(process.cwd(), '/tmp');
 
 var removeIgnoredFiles = function(files) {
     return _.reject(files, function(f) { return IGNORED_FILES_REGEX.test(f); });
-}
+};
 
 function Library(home, config) {
     this.home = home;
@@ -52,14 +52,6 @@ Library.prototype.init = function() {
     //console.log(artists);
 };
 
-Library.prototype._init = function() {
-    var artistNames = removeIgnoredFiles(fs.readdirSync(this.home));
-    var self = this;
-    artistNames.forEach(function(artistName) {
-        self.cache.artists[artistName] = {};
-    });
-};
-
 Library.prototype.getArtists = function(cb) {
     cb(null, this.cache.artists);
 };
@@ -70,7 +62,7 @@ Library.prototype.getAlbums = function(artistName, cb) {
 
 Library.prototype.getAlbumDownloadLink = function(artistName, albumName) {
     var source = path.join(this.home, artistName, albumName);
-    var target = path.join(source, 'download.tar.gz');
+    var target = path.join(DOWNLOAD_HOME, uuid.v4() + '.tar.gz');
     targz.compress(source, target, function() {
         console.log('done');
     });
