@@ -1,4 +1,3 @@
-var library = require('./library');
 var _ = require('underscore');
 
 // Controllers
@@ -15,7 +14,7 @@ var view = function(viewName, locals) {
     };
 };
 
-module.exports = function(app) {
+module.exports = function(app, library) {
 
     app.get('/', view('index'));
 
@@ -31,9 +30,7 @@ module.exports = function(app) {
         var albumId = req.param('albumId');
 
         var downloadLink = library.getAlbumDownloadLink(artistId, albumId);
-        console.log(downloadLink);
-        //res.download(downloadLink);
-        res.send(downloadLink);
+        res.send(202, { status: 'queued' });
     });
 
     app.get('/artists/:artistId/albums/:albumId/songs/:songId/download', function(req, res) {
@@ -43,6 +40,11 @@ module.exports = function(app) {
 
         var downloadLink = library.getSongDownloadLink(artistId, albumId, songId);
         res.download(downloadLink);
+    });
+
+    app.get('/download/:id', function(req, res) {
+        var downloadId = req.param('id');
+        res.download(process.cwd() + '/tmp/' + downloadId);
     });
 
 };

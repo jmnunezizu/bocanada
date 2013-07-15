@@ -1,4 +1,5 @@
 var express = require('express')
+  , library = require('./src/library')
   , app = express();
 
 // app config
@@ -7,7 +8,7 @@ app.use('/assets', express.static(__dirname + '/assets'));
 app.use(require('./src/middleware/uri-component-decoder')());
 app.use(express.bodyParser());
 
-require('./src/routes')(app);
+require('./src/routes')(app, library);
 
 app.use(express.logger());
 
@@ -19,7 +20,17 @@ var server = app.listen(port, function() {
 });
 
 // socket start
-var socket = require('socket.io').listen(server);
+var io = require('socket.io').listen(server);
+io.on('connection', function(socket) {
+    socket.send('{"success": 1}')
+    // library events
+    library.on('downloadReady', function(file) {
+        console.log('download file ready', file);
+        socket.emit('downloadReady', file);
+    });
+
+});
+
 
 server.on('error', function(err) {
     if (err.code == 'EADDRINUSE') {

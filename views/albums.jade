@@ -6,9 +6,9 @@ block content
     div#albums-accordion.accordion
         each album, index in albums
             - var albumId = 'album-' + index;
-            div.accordion-group
+            div.accordion-group(id="download-group-#{albumId}")
                 div.accordion-heading
-                    a.btn.btn-primary(href="/artists/#{artist}/albums/#{album.linkName}/download", style="float: right;") Download
+                    a.btn.btn-primary(id="download-button-#{albumId}", href="/artists/#{artist}/albums/#{album.linkName}/download", style="float: right;") Download
                     a.accordion-toggle(data-toggle="collapse", data-parent="#albums-accordion", href="##{albumId}")
                         = album.name
                 div(id="#{albumId}").accordion-body.collapse
@@ -17,3 +17,29 @@ block content
                             each song in album.songs
                                 li
                                     = song
+
+    div#status
+
+
+block inlineScripts
+    script.
+        $(document).ready(function() {
+            $('#albums-accordion div.accordion-group a').each(function(index, value) {
+                $(value).bind('click', function(e) {
+                    e.preventDefault();
+                    var status = $('#status');
+                    status.empty();
+                    status.find('p').text();
+                    var target = $(e.target);
+                    var downloadLink = target.attr('href');
+                    $.get(downloadLink);
+                });
+            });
+            
+            var socket = new io.connect('http://localhost', {port: 3000});
+            socket.on('downloadReady', function(file) {
+                $('<a>').attr({
+                    href: '/download/' + file.filename
+                }).text('Download now').appendTo('#status');
+            });
+        });

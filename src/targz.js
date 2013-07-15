@@ -37,7 +37,9 @@ TarGz.prototype.compress = function(source, target, cb) {
                   .pipe(
                     fstream.Writer(target)
                         .on('close', function() {
-                            cb(null);
+                            cb(null, {
+                                link: target
+                            });
                         })
             );
         });

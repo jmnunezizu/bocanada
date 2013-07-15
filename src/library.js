@@ -3,8 +3,11 @@ var wrench = require('wrench')
   , path = require('path')
   , _ = require('underscore')
   , uuid = require('node-uuid')
+  , util = require('util')
+  , EventEmitter = require('events').EventEmitter
+  , kue = require('kue')
   , xld = new require('xld')()
-  , targz = new require('./targz')();
+  , TarGz = new require('./targz');
 
 var LIBRARY_HOME = '/Users/jmnunezizu/Music/iTunes/iTunes Media/Music'
   , IGNORED_FILES_REGEX = /\.DS_Store/
@@ -15,12 +18,33 @@ var removeIgnoredFiles = function(files) {
 };
 
 function Library(home, config) {
+    EventEmitter.call(this);
     this.home = home;
     this.cache = {
         artists: {}
     };
+    this.jobs = kue.createQueue();
+    this.targz = new TarGz();
+
+    var self = this;
+    
+    this.jobs.process('compress', function(job, done) {
+        console.log('Processing the job', job.id);
+        var filename = job.id + '.tar.gz';
+        self.targz.compress(job.data.source, path.join(job.data.targetDir, filename), function(err, compressedFile) {
+            compressedFile.filename = filename;
+            self.emit('downloadReady', compressedFile);
+            done();
+        });
+    });
+
     this.init();
-};
+}
+
+/**
+ * Inherit from EventEmitter.
+ */
+util.inherits(Library, EventEmitter);
 
 Library.prototype.init = function() {
     var artists = this.cache.artists;
@@ -61,12 +85,12 @@ Library.prototype.getAlbums = function(artistName, cb) {
 };
 
 Library.prototype.getAlbumDownloadLink = function(artistName, albumName) {
-    var source = path.join(this.home, artistName, albumName);
-    var target = path.join(DOWNLOAD_HOME, uuid.v4() + '.tar.gz');
-    targz.compress(source, target, function() {
-        console.log('done');
-    });
-    return target;
+    var compressJob = this.jobs.create('compress', {
+        source: path.join(this.home, artistName, albumName),
+        targetDir: DOWNLOAD_HOME
+    }).save();
+
+    return compressJob;
 };
 
 Library.prototype.getSongDownloadLink = function(artistName, albumName, songName) {
